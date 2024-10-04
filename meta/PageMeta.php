@@ -1,6 +1,7 @@
 <?php
 
 namespace dokuwiki\plugin\struct\meta;
+use dokuwiki\plugin\struct\meta\TranslationPluginCompat;
 
 class PageMeta
 {
@@ -17,6 +18,7 @@ class PageMeta
 
     public function __construct($pid)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         /** @var \helper_plugin_struct_db $helper */
         $helper = plugin_load('helper', 'struct_db');
         $this->sqlite = $helper->getDB();

@@ -13,7 +13,7 @@ use dokuwiki\Extension\Event;
 use dokuwiki\plugin\struct\meta\AccessDataValidator;
 use dokuwiki\plugin\struct\meta\AccessTable;
 use dokuwiki\plugin\struct\meta\Assignments;
-
+use dokuwiki\plugin\struct\meta\TranslationPluginCompat;
 /**
  * Class action_plugin_struct_entry
  *
@@ -132,6 +132,9 @@ class action_plugin_struct_entry extends ActionPlugin
      */
     public function handlePagesaveAfter(Event $event, $param)
     {
+        // No matter if it's a revert or not, always destroy cache of translated pages on save
+        TranslationPluginCompat::invalidatePageCache($event->data['id']);
+
         global $ACT;
         if ($ACT == 'revert') return false; // handled in revert
 

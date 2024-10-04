@@ -1,6 +1,7 @@
 <?php
 
 namespace dokuwiki\plugin\struct\meta;
+use dokuwiki\plugin\struct\meta\TranslationPluginCompat;
 
 /**
  * Class Assignments
@@ -122,6 +123,7 @@ class Assignments
      */
     public function reevaluatePageAssignments($pid)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         // reload patterns
         $this->loadPatterns();
         $tables = $this->getPageAssignments($pid, true);
@@ -175,6 +177,7 @@ class Assignments
      */
     public function assignPageSchema($page, $table)
     {
+        $page = TranslationPluginCompat::getRootPageID($page);
         $sql = 'REPLACE INTO schema_assignments (pid, tbl, assigned) VALUES (?, ?, 1)';
         return (bool)$this->sqlite->query($sql, [$page, $table]);
     }
@@ -188,6 +191,7 @@ class Assignments
      */
     public function deassignPageSchema($page, $table)
     {
+        $page = TranslationPluginCompat::getRootPageID($page);
         $sql = 'REPLACE INTO schema_assignments (pid, tbl, assigned) VALUES (?, ?, 0)';
         return (bool)$this->sqlite->query($sql, [$page, $table]);
     }
@@ -211,6 +215,7 @@ class Assignments
      */
     public function getPageAssignments($page, $checkpatterns = true)
     {
+        $page = TranslationPluginCompat::getRootPageID($page);
         $tables = [];
         $page = cleanID($page);
 
@@ -267,6 +272,7 @@ class Assignments
         }
 
         return $result;
+        // FIXME!!!!!
     }
 
     /**
@@ -279,6 +285,7 @@ class Assignments
      */
     protected function matchPagePattern($pattern, $page, $pns = null)
     {
+        $page = TranslationPluginCompat::getRootPageID($page);
         if (trim($pattern, ':') == '**') return true; // match all
 
         // regex patterns
@@ -320,6 +327,7 @@ class Assignments
      */
     public function getHistoricAssignments($page, $ts)
     {
+        $page = TranslationPluginCompat::getRootPageID($page);
         $sql = "SELECT DISTINCT tbl FROM schemas WHERE ts <= ? ORDER BY ts DESC";
         $tables = $this->sqlite->queryAll($sql, [$ts]);
 

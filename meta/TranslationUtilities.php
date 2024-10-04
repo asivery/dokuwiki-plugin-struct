@@ -1,6 +1,7 @@
 <?php
 
 namespace dokuwiki\plugin\struct\meta;
+use dokuwiki\plugin\struct\meta\TranslationPluginCompat;
 
 trait TranslationUtilities
 {
@@ -47,7 +48,7 @@ trait TranslationUtilities
     /**
      * Returns the translated key
      *
-     * Uses the current language as determined by $conf['lang']. Falls back to english
+     * Uses the current language as determined by $conf['lang']. Falls back to fallback_language
      * and then to the provided default
      *
      * @param string $key
@@ -58,12 +59,12 @@ trait TranslationUtilities
     public function getTranslatedKey($key, $default)
     {
         global $conf;
-        $lang = $conf['lang'];
+        $lang = TranslationPluginCompat::getCurrentLanguage();
         if (!blank($this->config[$key][$lang])) {
             return $this->config[$key][$lang];
         }
-        if (!blank($this->config[$key]['en'])) {
-            return $this->config[$key]['en'];
+        if (!blank($this->config[$key][$conf['plugin']['struct']['fallback_language']])) {
+            return $this->config[$key][$conf['plugin']['struct']['fallback_language']];
         }
         return $default;
     }

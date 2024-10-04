@@ -2,6 +2,7 @@
 
 namespace dokuwiki\plugin\struct\meta;
 
+use dokuwiki\plugin\struct\meta\TranslationPluginCompat;
 /**
  * Class AccessTable
  *
@@ -56,18 +57,21 @@ abstract class AccessTable
 
     public static function getPageAccess($tablename, $pid, $ts = 0)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         $schema = new Schema($tablename, $ts);
         return new AccessTablePage($schema, $pid, $ts, 0);
     }
 
     public static function getSerialAccess($tablename, $pid, $rid = 0)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         $schema = new Schema($tablename, 0);
         return new AccessTableSerial($schema, $pid, 0, $rid);
     }
 
     public static function getGlobalAccess($tablename, $rid = 0)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         $schema = new Schema($tablename, 0);
         return new AccessTableGlobal($schema, '', 0, $rid);
     }
@@ -84,6 +88,7 @@ abstract class AccessTable
      */
     public static function bySchema(Schema $schema, $pid, $ts = 0, $rid = 0)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         if (self::isTypePage($pid, $ts)) {
             return new AccessTablePage($schema, $pid, $ts, $rid);
         }
@@ -103,6 +108,7 @@ abstract class AccessTable
      */
     public static function byTableName($tablename, $pid, $ts = 0, $rid = 0)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         // force loading the latest schema for anything other than page data,
         // for which we might actually need the history
         if (!self::isTypePage($pid, $ts)) {
@@ -123,6 +129,7 @@ abstract class AccessTable
      */
     public function __construct($schema, $pid, $ts = 0, $rid = 0)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         /** @var \helper_plugin_struct_db $helper */
         $helper = plugin_load('helper', 'struct_db');
         $this->sqlite = $helper->getDB();
@@ -585,6 +592,7 @@ abstract class AccessTable
      */
     public static function isTypePage($pid, $rev)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         return $rev > 0;
     }
 
@@ -598,6 +606,7 @@ abstract class AccessTable
      */
     public static function isTypeGlobal($pid, $rev)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         return $pid === '';
     }
 
@@ -611,6 +620,7 @@ abstract class AccessTable
      */
     public static function isTypeSerial($pid, $rev)
     {
+        $pid = TranslationPluginCompat::getRootPageID($pid);
         return $pid !== '' && $rev === 0;
     }
 

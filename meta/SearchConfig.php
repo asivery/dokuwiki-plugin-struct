@@ -1,6 +1,7 @@
 <?php
 
 namespace dokuwiki\plugin\struct\meta;
+use dokuwiki\plugin\struct\meta\TranslationPluginCompat;
 
 /**
  * Class SearchConfig
@@ -116,6 +117,7 @@ class SearchConfig extends Search
         if (!isset($INFO['id'])) {
             $INFO['id'] = '';
         }
+        $id = TranslationPluginCompat::getRootPageID($INFO['id']);
 
         // apply inexpensive filters first
         $filter = str_replace(
@@ -127,9 +129,9 @@ class SearchConfig extends Search
                 '$TODAY$'
             ],
             [
-                $INFO['id'],
-                getNS($INFO['id']),
-                noNS($INFO['id']),
+                $id,
+                getNS($id),
+                noNS($id),
                 $INPUT->server->str('REMOTE_USER'),
                 date('Y-m-d')
             ],

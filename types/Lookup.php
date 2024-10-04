@@ -112,7 +112,7 @@ class Lookup extends Dropdown
      *
      * @return array
      */
-    protected function getOptions()
+    protected function getOptions($defaultlang = false)
     {
         $schema = $this->config['schema'];
         $column = $this->getLookupColumn();

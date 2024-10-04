@@ -60,7 +60,6 @@ class syntax_plugin_struct_value extends SyntaxPlugin
     public function handle($match, $state, $pos, Doku_Handler $handler)
     {
         global $conf;
-
         try {
             // strip {{$ and }} markers
             $inline = substr($match, 3, -2);
