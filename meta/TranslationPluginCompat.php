@@ -63,6 +63,8 @@ class TranslationPluginCompat
 
     public static function getCurrentLanguage(){
         global $INFO;
+        global $conf;
+
         $id = $INFO['id'];
         $translation_helper = plugin_load('helper', 'translation');
 
